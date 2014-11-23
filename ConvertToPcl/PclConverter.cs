@@ -217,9 +217,9 @@ namespace MLabs.ConvertToPcl
                     try
                     {
                         projectModel.DteProject.Save(projectModel.DteProject.FullName);
-                        ChangeProjectFile(projectModel.DteProject, portFramework.Name);
                         ChangeAssemblyFile(projectModel.DteProject);
                         RemoveFrameworkReference(projectModel.DteProject);
+                        ChangeProjectFile(projectModel.DteProject, portFramework.Name);
 
                         synchronizationContext.Post(o =>
                         {
@@ -299,7 +299,7 @@ namespace MLabs.ConvertToPcl
                     var fullName = GetFullName(reference);
                     var assemblyName = new AssemblyName(fullName);
                     var isFrameworkAssembly = IsFrameworkAssembly(assemblyName);
-                    if (isFrameworkAssembly)
+                    if (isFrameworkAssembly && !assemblyName.Name.Contains("mscorlib"))
                     {
                         try
                         {
@@ -321,9 +321,15 @@ namespace MLabs.ConvertToPcl
             {
                 assembly = Assembly.Load(assemblyName);
             }
-            catch
+                catch (FileNotFoundException)
             {
                 // unavailable third party tools
+                return false;
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("IsFrameworkAssembly exception" + ex);
                 return false;
             }
 
@@ -385,26 +391,36 @@ namespace MLabs.ConvertToPcl
         {
             var posTarget = fileContent.IndexOf(@"<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>");
             if (posTarget < 1) return fileContent;
+
+            bool isPclAlready = false;
             const string startImportProject = @"<Import Project=";
             const string endEmpProject = "/>";
             const string NewStartProject =
                 @"<Import Project=""$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets"" />";
-            var startPos = fileContent.IndexOf(startImportProject);
-            var endPos = fileContent.IndexOf(endEmpProject, startPos);
-            fileContent = fileContent.Remove(startPos, endPos - startPos + endEmpProject.Length);
-            fileContent = fileContent.Insert(startPos, NewStartProject);
+            const string ProjectType =
+    @"<ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>";
 
-            const string EmptyTarget = "<TargetFrameworkProfile />";
-            if (fileContent.Contains(EmptyTarget))
+            isPclAlready = fileContent.Contains(NewStartProject) || fileContent.Contains(ProjectType);
+
+            if (!isPclAlready)
             {
-                fileContent = fileContent.Replace(EmptyTarget, string.Empty);
+                var startPos = fileContent.IndexOf(startImportProject);
+                var endPos = fileContent.IndexOf(endEmpProject, startPos);
+                fileContent = fileContent.Remove(startPos, endPos - startPos + endEmpProject.Length);
+                fileContent = fileContent.Insert(startPos, NewStartProject);
+
+                const string EmptyTarget = "<TargetFrameworkProfile />";
+                if (fileContent.Contains(EmptyTarget))
+                {
+                    fileContent = fileContent.Replace(EmptyTarget, string.Empty);
+                }
+
+
+                fileContent = fileContent.Insert(posTarget, ProjectType + "\r\n");
+                var frameWork = string.Format("<TargetFrameworkProfile>{0}</TargetFrameworkProfile>", frameWorkVersion);
+                fileContent = fileContent.Insert(posTarget, frameWork + "\r\n");
             }
 
-            const string ProjectType =
-                @"<ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>";
-            fileContent = fileContent.Insert(posTarget, ProjectType + "\r\n");
-            var frameWork = string.Format("<TargetFrameworkProfile>{0}</TargetFrameworkProfile>", frameWorkVersion);
-            fileContent = fileContent.Insert(posTarget, frameWork + "\r\n");
             return fileContent;
         }
 
