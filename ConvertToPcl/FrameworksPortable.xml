@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frameworks>
+  <Framework Name="Profile5" Description=" .NET Framework 4, Windows 8"/>
+  <Framework Name="Profile6" Description=" .NET Framework 4.0.3, Windows 8"/>
+  <Framework Name="Profile7" Description=" .NET Framework 4.5, Windows 8"/>
+  <Framework Name="Profile14" Description=" .NET Framework 4, Silverlight 5"/>
+  <Framework Name="Profile19" Description=" .NET Framework 4.0.3, Silverlight 5"/>
+  <Framework Name="Profile24" Description=" .NET Framework 4.5, Silverlight 5"/>
+  <Framework Name="Profile31" Description=" Windows 8.1, Windows Phone Silverlight 8.1"/>
+  <Framework Name="Profile32" Description=" Windows 8.1, Windows Phone 8.1"/>
+  <Framework Name="Profile37" Description=" .NET Framework 4, Silverlight 5, Windows 8"/>
+  <Framework Name="Profile42" Description=" .NET Framework 4.0.3, Silverlight 5, Windows 8"/>
+  <Framework Name="Profile44" Description=" .NET Framework 4.5.1, Windows 8.1"/>
+  <Framework Name="Profile47" Description=" .NET Framework 4.5, Silverlight 5, Windows 8"/>
+  <Framework Name="Profile49" Description=" .NET Framework 4.5, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile78" Description=" .NET Framework 4.5, Windows 8, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile84" Description=" Windows Phone 8.1, Windows Phone Silverlight 8.1"/>
+  <Framework Name="Profile92" Description=" .NET Framework 4, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile102" Description=" .NET Framework 4.0.3, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile111" Description=" .NET Framework 4.5, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile136" Description=" .NET Framework 4, Silverlight 5, Windows 8, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile147" Description=" .NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile151" Description=" .NET Framework 4.5.1, Windows 8.1, Windows Phone 8.1"/>
+  <Framework Name="Profile157" Description=" Windows 8.1, Windows Phone 8.1, Windows Phone Silverlight 8.1"/>
+  <Framework Name="Profile158" Description=" .NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile225" Description=" .NET Framework 4, Silverlight 5, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile240" Description=" .NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile255" Description=" .NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone 8.1"/>
+  <Framework Name="Profile259" Description=" .NET Framework 4.5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile328" Description=" .NET Framework 4, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile336" Description=" .NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8"/>
+  <Framework Name="Profile344" Description=" .NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8"/>
+</Frameworks>

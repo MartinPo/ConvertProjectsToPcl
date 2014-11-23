@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frameworks>
+  <Framework Id="Profile5" Name=" Portable Subset (.NET Framework 4, Windows 8)"/>
+  <Framework Id="Profile6" Name=" Portable Subset (.NET Framework 4.0.3, Windows 8)"/>
+  <Framework Id="Profile7" Name=" Portable Subset (.NET Framework 4.5, Windows 8)"/>
+  <Framework Id="Profile14" Name=" Portable Subset (.NET Framework 4, Silverlight 5)"/>
+  <Framework Id="Profile19" Name=" Portable Subset (.NET Framework 4.0.3, Silverlight 5)"/>
+  <Framework Id="Profile24" Name=" Portable Subset (.NET Framework 4.5, Silverlight 5)"/>
+  <Framework Id="Profile31" Name=" Portable Subset (Windows 8.1, Windows Phone Silverlight 8.1)"/>
+  <Framework Id="Profile32" Name=" Portable Subset (Windows 8.1, Windows Phone 8.1)"/>
+  <Framework Id="Profile37" Name=" Portable Subset (.NET Framework 4, Silverlight 5, Windows 8)"/>
+  <Framework Id="Profile42" Name=" Portable Subset (.NET Framework 4.0.3, Silverlight 5, Windows 8)"/>
+  <Framework Id="Profile44" Name=" Portable Subset (.NET Framework 4.5.1, Windows 8.1)"/>
+  <Framework Id="Profile47" Name=" Portable Subset (.NET Framework 4.5, Silverlight 5, Windows 8)"/>
+  <Framework Id="Profile49" Name=" Portable Subset (.NET Framework 4.5, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile78" Name=" Portable Subset (.NET Framework 4.5, Windows 8, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile84" Name=" Portable Subset (Windows Phone 8.1, Windows Phone Silverlight 8.1)"/>
+  <Framework Id="Profile92" Name=" Portable Subset (.NET Framework 4, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile102" Name=" Portable Subset (.NET Framework 4.0.3, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile111" Name=" Portable Subset (.NET Framework 4.5, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile136" Name=" Portable Subset (.NET Framework 4, Silverlight 5, Windows 8, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile147" Name=" Portable Subset (.NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile151" Name=" Portable Subset (.NET Framework 4.5.1, Windows 8.1, Windows Phone 8.1)"/>
+  <Framework Id="Profile157" Name=" Portable Subset (Windows 8.1, Windows Phone 8.1, Windows Phone Silverlight 8.1)"/>
+  <Framework Id="Profile158" Name=" Portable Subset (.NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile225" Name=" Portable Subset (.NET Framework 4, Silverlight 5, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile240" Name=" Portable Subset (.NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile255" Name=" Portable Subset (.NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone 8.1)"/>
+  <Framework Id="Profile259" Name=" Portable Subset (.NET Framework 4.5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile328" Name=" Portable Subset (.NET Framework 4, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile336" Name=" Portable Subset (.NET Framework 4.0.3, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8)"/>
+  <Framework Id="Profile344" Name=" Portable Subset (.NET Framework 4.5, Silverlight 5, Windows 8, Windows Phone 8.1, Windows Phone Silverlight 8)"/>
+</Frameworks>
