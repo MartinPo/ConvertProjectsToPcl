@@ -203,7 +203,7 @@ namespace MLabs.ConvertToPcl
             await UpdateFrameworks(portableFramework);
             projectsUpdateList.Projects = LoadProjects();
 
-            projectsUpdateList.State = "Done";
+            projectsUpdateList.State = "Done. Please close Dialog and reload Projects.";
         }
 
         private Task UpdateFrameworks(PortableFramework portFramework)
@@ -220,6 +220,7 @@ namespace MLabs.ConvertToPcl
                         ChangeAssemblyFile(projectModel.DteProject);
                         RemoveFrameworkReference(projectModel.DteProject);
                         ChangeProjectFile(projectModel.DteProject, portFramework.Name);
+                        
 
                         synchronizationContext.Post(o =>
                         {
@@ -273,7 +274,7 @@ namespace MLabs.ConvertToPcl
             }
         }
 
-        public List<ProjectItem> GetProjectItemsRecursively(ProjectItems items)
+        private List<ProjectItem> GetProjectItemsRecursively(ProjectItems items)
         {
             var result = new List<ProjectItem>();
             if (items == null) return result;
@@ -287,7 +288,7 @@ namespace MLabs.ConvertToPcl
         }
 
 
-        public void RemoveFrameworkReference(Project project)
+        private void RemoveFrameworkReference(Project project)
         {
             var vsproject = project.Object as VSLangProj.VSProject;
 
@@ -340,7 +341,7 @@ namespace MLabs.ConvertToPcl
         }
 
 
-        public static string GetFullName(VSLangProj.Reference reference)
+        private static string GetFullName(VSLangProj.Reference reference)
         {
             return string.Format("{0}, Version={1}.{2}.{3}.{4}, Culture={5}, PublicKeyToken={6}",
                 reference.Name,

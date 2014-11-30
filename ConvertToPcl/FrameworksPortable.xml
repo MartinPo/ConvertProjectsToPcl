@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Frameworks>
-  <Framework Name="Profile5" Description=" .NET Framework 4, Windows 8"/>
-  <Framework Name="Profile6" Description=" .NET Framework 4.0.3, Windows 8"/>
   <Framework Name="Profile7" Description=" .NET Framework 4.5, Windows 8"/>
+  <Framework Name="Profile5" Description=" .NET Framework 4, Windows 8"/>
+  <Framework Name="Profile6" Description=" .NET Framework 4.0.3, Windows 8"/>  
   <Framework Name="Profile14" Description=" .NET Framework 4, Silverlight 5"/>
   <Framework Name="Profile19" Description=" .NET Framework 4.0.3, Silverlight 5"/>
   <Framework Name="Profile24" Description=" .NET Framework 4.5, Silverlight 5"/>

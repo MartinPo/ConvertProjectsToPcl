@@ -37,7 +37,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.reloadButton = new System.Windows.Forms.Button();
             this.cmbPortables = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -113,30 +113,30 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(370, 8);
+            this.button3.Location = new System.Drawing.Point(288, 37);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(76, 52);
+            this.button3.Size = new System.Drawing.Size(146, 23);
             this.button3.TabIndex = 4;
             this.button3.Text = "Convert";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // label1
+            // lblInfo
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(452, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 13);
-            this.label1.TabIndex = 5;
+            this.lblInfo.Location = new System.Drawing.Point(452, 13);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(165, 47);
+            this.lblInfo.TabIndex = 5;
             // 
             // reloadButton
             // 
-            this.reloadButton.Location = new System.Drawing.Point(219, 37);
+            this.reloadButton.Location = new System.Drawing.Point(623, 37);
             this.reloadButton.Name = "reloadButton";
-            this.reloadButton.Size = new System.Drawing.Size(145, 23);
+            this.reloadButton.Size = new System.Drawing.Size(39, 23);
             this.reloadButton.TabIndex = 6;
             this.reloadButton.Text = "Reload Projects List";
             this.reloadButton.UseVisualStyleBackColor = true;
+            this.reloadButton.Visible = false;
             this.reloadButton.Click += new System.EventHandler(this.reloadButton_Click);
             // 
             // cmbPortables
@@ -144,7 +144,7 @@
             this.cmbPortables.FormattingEnabled = true;
             this.cmbPortables.Location = new System.Drawing.Point(12, 10);
             this.cmbPortables.Name = "cmbPortables";
-            this.cmbPortables.Size = new System.Drawing.Size(352, 21);
+            this.cmbPortables.Size = new System.Drawing.Size(422, 21);
             this.cmbPortables.TabIndex = 7;
             // 
             // ProjectsUpdateList
@@ -154,7 +154,7 @@
             this.ClientSize = new System.Drawing.Size(690, 366);
             this.Controls.Add(this.cmbPortables);
             this.Controls.Add(this.reloadButton);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -165,7 +165,6 @@
             this.Text = "Convert to Portable Class Library";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -179,7 +178,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Update;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProjectName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Framework;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Button reloadButton;
         private System.Windows.Forms.ComboBox cmbPortables;
     }

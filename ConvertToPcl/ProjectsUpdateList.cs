@@ -44,9 +44,9 @@ namespace MLabs.ConvertToPcl
             get { return (PortableFramework) cmbPortables.SelectedItem; }
         }
 
-        public string State { set { label1.Text = value; } }
+        public string State { set { lblInfo.Text = value; } }
 
-        private async void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
             var onUpdate = UpdateFired;
             if(onUpdate != null)
