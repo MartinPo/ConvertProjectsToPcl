@@ -57,7 +57,10 @@ namespace MLabs.ConvertToPcl
         {
             foreach (var projectModel in Projects)
             {
-                projectModel.IsSelected = true;
+                if (projectModel.NetFrameworkInUse.Name.Contains("4.5"))
+                {
+                    projectModel.IsSelected = true;
+                }
             }
             dataGridView1.Refresh();
         }

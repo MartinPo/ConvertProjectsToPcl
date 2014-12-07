@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -210,17 +209,19 @@ namespace MLabs.ConvertToPcl
         {
             return Task.Run(() =>
             {
-                var selectedProjects = projectsUpdateList.Projects.Where(p => p.IsSelected);
+                var selectedProjects = projectsUpdateList.Projects.Where(p => p.IsSelected && p.NetFrameworkInUse.Name.Contains("4.5"));
 
                 foreach (var projectModel in selectedProjects)
                 {
                     try
                     {
                         projectModel.DteProject.Save(projectModel.DteProject.FullName);
-                        ChangeAssemblyFile(projectModel.DteProject);
-                        RemoveFrameworkReference(projectModel.DteProject);
+                        if (!projectModel.NetFrameworkInUse.Name.ToLower().Contains("port"))
+                        {
+                            ChangeAssemblyFile(projectModel.DteProject);
+                            RemoveFrameworkReference(projectModel.DteProject);
+                        }
                         ChangeProjectFile(projectModel.DteProject, portFramework.Name);
-                        
 
                         synchronizationContext.Post(o =>
                         {
@@ -236,8 +237,7 @@ namespace MLabs.ConvertToPcl
             });
         }
 
-
-        public void ChangeAssemblyFile(Project project)
+        private void ChangeAssemblyFile(Project project)
         {
             var items = GetProjectItemsRecursively(project.ProjectItems);
 
@@ -249,29 +249,42 @@ namespace MLabs.ConvertToPcl
 
                     if (assemblycs.Contains("AssemblyInfo.cs"))
                     {
+                        bool isChanged;
                         string fileContent;
-                        using (var sr = new StreamReader(assemblycs))
+                        fileContent = ChangeAssemblyContent(assemblycs, out isChanged);
+                        if(isChanged)
                         {
-                            fileContent = sr.ReadToEnd();
-                            fileContent = fileContent.Replace("[assembly: ComVisible(false)]", string.Empty);
-                            var pos1 = fileContent.IndexOf("[assembly: Guid(");
-                            if (pos1 > 0)
-                            {
-                                var pos2 = fileContent.IndexOf(")]", pos1);
-                                fileContent = fileContent.Remove(pos1, pos2 - pos1 + 2);
-                            }
+                            element.Open();
+                            element.Save();
+                            var editDoc = (TextDocument) element.Document.Object("TextDocument");
+                            var editPoint = (EditPoint) editDoc.StartPoint.CreateEditPoint();
+                            var endPoint = (EditPoint) editDoc.EndPoint.CreateEditPoint();
+                            editPoint.Delete(endPoint);
+                            endPoint.Insert(fileContent);
+                            element.Save();
                         }
-                        element.Open();
-                        element.Save();
-                        var editDoc = (TextDocument) element.Document.Object("TextDocument");
-                        var editPoint = (EditPoint) editDoc.StartPoint.CreateEditPoint();
-                        var endPoint = (EditPoint) editDoc.EndPoint.CreateEditPoint();
-                        editPoint.Delete(endPoint);
-                        endPoint.Insert(fileContent);
-                        element.Save();
                     }
                 }
             }
+        }
+
+        private static string ChangeAssemblyContent(string assemblycs, out bool isChanged)
+        {
+            string fileContent;
+            using (var sr = new StreamReader(assemblycs))
+            {
+                fileContent = sr.ReadToEnd();
+                var fileContentOrg = fileContent;
+                fileContent = fileContent.Replace("[assembly: ComVisible(false)]", string.Empty);
+                var pos1 = fileContent.IndexOf("[assembly: Guid(");
+                if (pos1 > 0)
+                {
+                    var pos2 = fileContent.IndexOf(")]", pos1);
+                    fileContent = fileContent.Remove(pos1, pos2 - pos1 + 2);
+                }
+                isChanged = fileContent != fileContentOrg;
+            }
+            return fileContent;
         }
 
         private List<ProjectItem> GetProjectItemsRecursively(ProjectItems items)
@@ -317,29 +330,27 @@ namespace MLabs.ConvertToPcl
 
         private static bool IsFrameworkAssembly(AssemblyName assemblyName)
         {
-            Assembly assembly;
             try
             {
-                assembly = Assembly.Load(assemblyName);
+                var assembly = Assembly.Load(assemblyName);
+                var attribute =
+                    assembly.GetCustomAttributes(typeof (AssemblyProductAttribute), false)[0] as
+                        AssemblyProductAttribute;
+                var isFrameworkAssembly = attribute != null && (attribute.Product == "Microsoft® .NET Framework");
+                return isFrameworkAssembly;
             }
-                catch (FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 // unavailable third party tools
                 return false;
-                
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("IsFrameworkAssembly exception" + ex);
                 return false;
             }
-
-            var attribute =
-                assembly.GetCustomAttributes(typeof (AssemblyProductAttribute), false)[0] as AssemblyProductAttribute;
-            var isFrameworkAssembly = attribute != null && (attribute.Product == "Microsoft® .NET Framework");
-            return isFrameworkAssembly;
         }
-
 
         private static string GetFullName(VSLangProj.Reference reference)
         {
@@ -355,16 +366,19 @@ namespace MLabs.ConvertToPcl
         /// </summary>
         /// <param name="project"></param>
         /// <param name="frameWorkVersion"></param>
-        public void ChangeProjectFile(Project project, string frameWorkVersion)
+        private void ChangeProjectFile(Project project, string frameWorkVersion)
         {
             string path = project.FullName;
-            string fileContent;
+            var fileLines = new List<string>();
             using (var sr = new StreamReader(path))
             {
-                fileContent = sr.ReadToEnd();
+                while (!sr.EndOfStream)
+                {
+                    fileLines.Add(sr.ReadLine());
+                }
             }
 
-            fileContent = ReplaceSettings(frameWorkVersion, fileContent);
+            var fileContent = ReplaceSettings(frameWorkVersion, fileLines);
 
             // Checkout file
             project.Save();
@@ -388,41 +402,59 @@ namespace MLabs.ConvertToPcl
             }
         }
 
-        private static string ReplaceSettings(string frameWorkVersion, string fileContent)
+        private static string ReplaceSettings(string frameWorkVersion, List<string> fileLines)
         {
-            var posTarget = fileContent.IndexOf(@"<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>");
-            if (posTarget < 1) return fileContent;
-
-            bool isPclAlready = false;
+            var exist = fileLines.Any(t => t.Contains(@"<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>"));
+            if (!exist) return ConvertToString(fileLines);
+            
             const string startImportProject = @"<Import Project=";
-            const string endEmpProject = "/>";
-            const string NewStartProject =
+            const string tab = "    ";
+            const string newStartProject =
                 @"<Import Project=""$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets"" />";
-            const string ProjectType =
+            const string projectTypePCL =
     @"<ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>";
 
-            isPclAlready = fileContent.Contains(NewStartProject) || fileContent.Contains(ProjectType);
+            var isPclAlready = fileLines.Any(t => t.Contains(newStartProject)) || fileLines.Any(t => t.Contains(projectTypePCL));
 
             if (!isPclAlready)
             {
-                var startPos = fileContent.IndexOf(startImportProject);
-                var endPos = fileContent.IndexOf(endEmpProject, startPos);
-                fileContent = fileContent.Remove(startPos, endPos - startPos + endEmpProject.Length);
-                fileContent = fileContent.Insert(startPos, NewStartProject);
-
-                const string EmptyTarget = "<TargetFrameworkProfile />";
-                if (fileContent.Contains(EmptyTarget))
+                var pos = fileLines.FindIndex(t => t.Contains(startImportProject));
+                if (pos > 0)
                 {
-                    fileContent = fileContent.Replace(EmptyTarget, string.Empty);
+                    fileLines.RemoveAt(pos);
+                    fileLines.Insert(pos, tab + newStartProject);
                 }
 
+                const string EmptyTarget = "<TargetFrameworkProfile />";
+                pos = fileLines.FindIndex(t => t.Contains((EmptyTarget)));
+                if (pos > 0)
+                {
+                    fileLines.RemoveAt(pos);
+                }
+                else
+                {
+                    pos = fileLines.FindIndex(t => t.Contains(@"<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>"));
+                }
 
-                fileContent = fileContent.Insert(posTarget, ProjectType + "\r\n");
-                var frameWork = string.Format("<TargetFrameworkProfile>{0}</TargetFrameworkProfile>", frameWorkVersion);
-                fileContent = fileContent.Insert(posTarget, frameWork + "\r\n");
+                var projectType = string.Format("{0}{1}", tab, projectTypePCL);
+                fileLines.Insert(pos, projectType);
+
+                var frameWork = string.Format("{0}<TargetFrameworkProfile>{1}</TargetFrameworkProfile>",tab, frameWorkVersion);
+                fileLines.Insert(pos, frameWork);
             }
 
-            return fileContent;
+            return ConvertToString(fileLines);
+        }
+
+        private static string ConvertToString(IEnumerable<string> lines)
+        {
+            string result = string.Empty;
+            foreach (var line in lines)
+            {
+                result += line + Environment.NewLine;
+            }
+
+            return result;
         }
 
         private static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)

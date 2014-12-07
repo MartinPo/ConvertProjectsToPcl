@@ -21,20 +21,6 @@ namespace ConvertToPcl_UnitTests
     public class PackageTest
     {
         [TestMethod()]
-        public void FileTest()
-        {
-            var mig = new PclConverter(null);
-            // mig.ChangeProjectFile(@"C:\DeleteMe\DailyStandupTool\Managers\Managers.csproj", "Profile7");
-            var dte2 = (EnvDTE.DTE)System.Runtime.InteropServices.Marshal.GetActiveObject("VisualStudio.DTE"); 
-            Solution solution = dte2.Solution;
-            foreach (Project project in solution.Projects)
-            {
-                 mig.ChangeAssemblyFile(project);
-                //mig.RemoveFrameworkReference(project);
-            }
-        }
-
-        [TestMethod()]
         public void CreateInstance()
         {
             ConvertToPclPackage package = new ConvertToPclPackage();
