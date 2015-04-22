@@ -407,7 +407,9 @@ namespace MLabs.ConvertToPcl
             var exist = fileLines.Any(t => t.Contains(@"<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>"));
             if (!exist) return ConvertToString(fileLines);
             
-            const string startImportProject = @"<Import Project=";
+            const string startImportProject = @"<Import Project=""$(MSBuildToolsPath)";
+            const string startImportProjectOld = @"<Import Project=""$(MSBuildBinPath)";
+                                                 
             const string tab = "    ";
             const string newStartProject =
                 @"<Import Project=""$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets"" />";
@@ -418,15 +420,11 @@ namespace MLabs.ConvertToPcl
 
             if (!isPclAlready)
             {
-                var pos = fileLines.FindIndex(t => t.Contains(startImportProject));
-                if (pos > 0)
-                {
-                    fileLines.RemoveAt(pos);
-                    fileLines.Insert(pos, tab + newStartProject);
-                }
+                ReplaceLineIfExist(fileLines, startImportProject, tab + newStartProject);
+                ReplaceLineIfExist(fileLines, startImportProjectOld, tab + newStartProject);
 
                 const string EmptyTarget = "<TargetFrameworkProfile />";
-                pos = fileLines.FindIndex(t => t.Contains((EmptyTarget)));
+                int pos = fileLines.FindIndex(t => t.Contains((EmptyTarget)));
                 if (pos > 0)
                 {
                     fileLines.RemoveAt(pos);
@@ -444,6 +442,16 @@ namespace MLabs.ConvertToPcl
             }
 
             return ConvertToString(fileLines);
+        }
+
+        private static void ReplaceLineIfExist(List<string> fileLines, string startImportProject, string replaceWith)
+        {
+            var pos = fileLines.FindIndex(t => t.Contains(startImportProject));
+            if (pos > 0)
+            {
+                fileLines.RemoveAt(pos);
+                fileLines.Insert(pos, replaceWith);
+            }
         }
 
         private static string ConvertToString(IEnumerable<string> lines)

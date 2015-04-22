@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="ConvertToPcl..4f7666b9-e62c-46a1-af25-21ab8742ff00" Version="0.6" Language="en-US" Publisher="MLabs" />
+    <Identity Id="ConvertToPcl..4f7666b9-e62c-46a1-af25-21ab8742ff00" Version="0.7" Language="en-US" Publisher="MLabs" />
     <DisplayName>Convert Projects to PCL</DisplayName>
     <Description xml:space="preserve">Convert 4.5 .NET Framework projects to Portable Class Libraries (PCL)</Description>
     <MoreInfo>https://github.com/MartinPo/ConvertProjectsToPcl</MoreInfo>
